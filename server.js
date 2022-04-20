@@ -1,14 +1,22 @@
 const express = require('express');
-const useSocket = require('socket.io');
+//const useSocket = require('socket.io');
 
 const app = express();
 const server = require('http').Server(app);
-const io = useSocket(server);
+const io = require('socket.io')(server, {
+  cors: {
+    origin: '*',
+  },
+});
 
 const rooms = new Map();
 
 app.get('/rooms', (req, res) => {
   res.json(rooms);
+});
+
+io.on('connection', (socket) => {
+  console.log('user coonected', socket.id);
 });
 
 server.listen(9999, (err) => {
